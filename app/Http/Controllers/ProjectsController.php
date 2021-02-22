@@ -26,17 +26,21 @@ class ProjectsController extends Controller
         return view('projects.show', compact('project'));
     }
 
+    public function create()
+    {
+        return view('projects.create');
+    }
+
     public function store(Request $request)
     {
 
         // validated
-
+        
         $attributes = $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'owner_id' => 'required'
         ]); 
-
+            
         // $attributes['owner_id'] = auth()->id();
 
         auth()->user()->projects()->create($attributes);
