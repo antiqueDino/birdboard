@@ -2,6 +2,8 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
+
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
@@ -15,3 +17,19 @@
     box-shadow: 0 2px 7px 0 #b0eaff;
     background-color:  #47cdff;
 }
+
+.card {
+    @apply  p-5 rounded-lg shadow-xl;
+    background-color: white;
+}
+
+.card h3{
+    border-color: #47cdff;
+}
+
+// a {
+//     .button {
+        
+//     }
+//     color: #47cdff;
+// }
