@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -39,7 +40,10 @@ class ManageProjectsTest extends TestCase
 
         $this->withoutExceptionHandling();
 
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
+
+        // $this->signIn();
+
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -49,7 +53,11 @@ class ManageProjectsTest extends TestCase
             'owner_id' => auth()->id()
         ];
 
-        $this->post('/projects', $attributes)->assertRedirect('/projects');  
+        $response = $this->post('/projects', $attributes);  
+
+        $project = Project::where($attributes)->first();
+
+        $response->assertRedirect($project->path());
 
         $this->assertDatabaseHas('projects', $attributes);
 
@@ -62,7 +70,7 @@ class ManageProjectsTest extends TestCase
      */
     public function an_authenticated_user_cannot_view_the_projects_of_others()
     {
-        $this->be(User::factory()->create());
+        $this->signIn();
 
         // $this->withoutExceptionHandling();
 
@@ -79,7 +87,7 @@ class ManageProjectsTest extends TestCase
     public function a_project_requires_a_title()
     {
 
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
         $attributes = Project::factory()->raw(['title' => '']);
 
@@ -93,7 +101,7 @@ class ManageProjectsTest extends TestCase
     public function a_project_requires_a_description()
     {
 
-        $this->actingAs(User::factory()->create());
+        $this->signIn();
 
 
         $attributes = Project::factory()->raw(['description' => '']);
@@ -108,7 +116,7 @@ class ManageProjectsTest extends TestCase
     public function a_user_can_view_their_project()
     {
 
-        $this->be(User::factory()->create());
+        $this->signIn();
 
         $this->withoutExceptionHandling();
 
@@ -116,7 +124,7 @@ class ManageProjectsTest extends TestCase
 
         $this->get($project->path())
             ->assertSee($project->title)
-            ->assertSee($project->description);
+            ->assertSee(Str::limit($project->description, 100));
     }
 
 }

@@ -15,11 +15,13 @@
         "bootstrap": "^4.0.0",
         "jquery": "^3.2",
         "laravel-mix": "^6.0.6",
+        "laravel-mix-tailwind": "^0.1.2",
+        "less": "^4.1.1",
+        "less-loader": "^8.0.0",
         "lodash": "^4.17.19",
         "mix-tailwindcss": "^1.3.0",
         "popper.js": "^1.12",
         "postcss": "^8.2.6",
-        "postcss-custom-properties": "^11.0.0",
         "resolve-url-loader": "^3.1.2",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0",
@@ -27,6 +29,6 @@
     },
     "dependencies": {
         "bulma": "^0.9.2",
-        "laravel-mix-postcss-config": "^1.4.0"
+        "postcss-import": "^14.0.0"
     }
 }
