@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('content')
 
-    <form class="container"  action="/projects" method="POST">
+    <form action="/projects" method="POST">
         @csrf
+
         <h1 class="heading is-1">Create a project</h1>
+        
         <div class="field">
             <label for="title" class="label">Title</label>
 

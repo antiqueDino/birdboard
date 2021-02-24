@@ -42,15 +42,13 @@ class ManageProjectsTest extends TestCase
 
         $this->signIn();
 
-        // $this->signIn();
-
-
         $this->get('/projects/create')->assertStatus(200);
 
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
-            'owner_id' => auth()->id()
+            'description' => $this->faker->sentence,
+            'owner_id' => auth()->id(),
+            'notes' => 'General notes here'
         ];
 
         $response = $this->post('/projects', $attributes);  
@@ -61,9 +59,13 @@ class ManageProjectsTest extends TestCase
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get('/projects')->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
     }
 
+    
     /**
      *
      * @test
@@ -75,9 +77,25 @@ class ManageProjectsTest extends TestCase
         // $this->withoutExceptionHandling();
 
         $project = Project::factory()->create();
-
+        
         $this->get($project->path())->assertStatus(403);
+        
+    }
 
+    /**
+     *
+     * @test
+     */
+    public function an_authenticated_user_cannot_update_the_projects_of_others()
+    {
+        $this->signIn();
+
+        // $this->withoutExceptionHandling();
+
+        $project = Project::factory()->create();
+        
+        $this->patch($project->path(), [])->assertStatus(403);
+        
     }
 
     /**
@@ -86,27 +104,46 @@ class ManageProjectsTest extends TestCase
      */
     public function a_project_requires_a_title()
     {
-
+        
         $this->signIn();
-
+        
         $attributes = Project::factory()->raw(['title' => '']);
-
+        
         $this->post('/projects', $attributes)->assertSessionHasErrors('title');
     }
-
+    
     /**
      *
      * @test
      */
     public function a_project_requires_a_description()
     {
-
+        
         $this->signIn();
-
+        
 
         $attributes = Project::factory()->raw(['description' => '']);
 
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
+    }
+
+
+    /**
+     * @test
+     */
+    public function a_user_can_update_a_project() {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $project = Project::factory()->create(['owner_id' => auth()->id()]);
+
+        $this->patch($project->path(), [
+            'notes' => 'Changed'
+        ])->assertRedirect($project->path());
+
+        $this->assertDatabaseHas('projects', ['notes' => 'Changed']);
+
     }
 
     /**
