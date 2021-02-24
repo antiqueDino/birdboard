@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,7 +39,6 @@ class ManageProjectsTest extends TestCase
     public function a_user_can_create_a_project()
     {
 
-        $this->withoutExceptionHandling();
 
         $this->signIn();
 
@@ -56,8 +56,6 @@ class ManageProjectsTest extends TestCase
         $project = Project::where($attributes)->first();
 
         $response->assertRedirect($project->path());
-
-        $this->assertDatabaseHas('projects', $attributes);
 
         $this->get($project->path())
             ->assertSee($attributes['title'])
@@ -94,7 +92,7 @@ class ManageProjectsTest extends TestCase
 
         $project = Project::factory()->create();
         
-        $this->patch($project->path(), [])->assertStatus(403);
+        $this->patch($project->path())->assertStatus(403);
         
     }
 
@@ -132,17 +130,14 @@ class ManageProjectsTest extends TestCase
      * @test
      */
     public function a_user_can_update_a_project() {
-        $this->withoutExceptionHandling();
 
-        $this->signIn();
+        $project = ProjectFactory::create();
 
-        $project = Project::factory()->create(['owner_id' => auth()->id()]);
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $attributes =  ['notes' => 'Changed'])
+            ->assertRedirect($project->path());
 
-        $this->patch($project->path(), [
-            'notes' => 'Changed'
-        ])->assertRedirect($project->path());
-
-        $this->assertDatabaseHas('projects', ['notes' => 'Changed']);
+        $this->assertDatabaseHas('projects', $attributes);
 
     }
 
@@ -152,14 +147,11 @@ class ManageProjectsTest extends TestCase
 
     public function a_user_can_view_their_project()
     {
+        $project = ProjectFactory::create();
 
-        $this->signIn();
 
-        $this->withoutExceptionHandling();
-
-        $project = Project::factory()->create(['owner_id' => auth()->id()]);
-
-        $this->get($project->path())
+        $this->actingAs($project->owner)
+            ->get($project->path())
             ->assertSee($project->title)
             ->assertSee(Str::limit($project->description, 100));
     }
