@@ -22,9 +22,7 @@
                 type="text" 
                 class="textarea bg-transparent border border-grey-light rounded p-2 text-xs w-full" 
                 name="description"
-                required>
-                {{ $project->description }}
-            </textarea>
+                required>{{ $project->description }}</textarea>
         </div>
     </div>
 
