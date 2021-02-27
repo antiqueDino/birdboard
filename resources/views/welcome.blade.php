@@ -117,6 +117,44 @@
                     </div>
                 </div>
             </div>  --}}
+            <div class="w-full h-screen bg-center bg-no-repeat bg-cover" style="background-image: url('https://images.unsplash.com/photo-1609342475528-dd7d93e8311e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=676&q=80');">
+                <div class="w-full h-screen bg-opacity-50 bg-black flex justify-center items-center">
+                    <div class="mx-4 text-center text-white">
+                        <h1 class="font-bold text-6xl mb-12">Manage your project with Birdboard</h1>
+                        <div>
+
+                            <!-- Authentication Links -->
+                            @guest
+                                @if (Route::has('login'))
+
+                                    <a href="{{ route('login') }}" class="bg-blue-500 rounded-md font-bold text-white text-center px-4 py-3 transition duration-300 ease-in-out hover:bg-blue-600 mr-2">
+                                        {{ __('Login') }}
+                                    </a>
+                                    
+                                @endif
+                                
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}" class="bg-red-500 rounded-md font-bold text-white text-center px-4 py-3 transition duration-300 ease-in-out hover:bg-red-600 ml-2">
+                                        {{ __('Register') }}
+                                    </a>
+                                    
+                                @endif
+                            @else
+                                <a href="/projects" class="bg-blue-500 rounded-md font-bold text-white text-center px-4 py-3 transition duration-300 ease-in-out hover:bg-blue-600 mr-2">
+                                    My Projects
+                                </a>
+                            @endguest
+
+                            {{--  <a href="" class="bg-blue-500 rounded-md font-bold text-white text-center px-4 py-3 transition duration-300 ease-in-out hover:bg-blue-600 mr-2">
+                                Click here
+                            </a>
+                            <a href="" class="bg-red-500 rounded-md font-bold text-white text-center px-4 py-3 transition duration-300 ease-in-out hover:bg-red-600 ml-2">
+                                Or click here
+                            </a>  --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <script src="{{ asset('js/app.js') }}" defer></script>
 

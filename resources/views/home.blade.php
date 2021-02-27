@@ -13,8 +13,13 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    <div class="flex justify-between items-center py-2">
+                        {{ __('You are logged in!') }}
 
-                    {{ __('You are logged in!') }}
+                        <a href="/projects" class="bg-blue-500 rounded-md font-bold text-white text-center py-1 px-2  my-8 justifiy-end transition duration-300 ease-in-out hover:bg-blue-600 mr-2">
+                            My Projects
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
