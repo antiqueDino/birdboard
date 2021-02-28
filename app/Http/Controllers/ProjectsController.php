@@ -54,11 +54,17 @@ class ProjectsController extends Controller
 
         $this->authorize('update', $project);
 
-        // $attributes = $this->validateRequest();
-
         $project->update($this->validateRequest());
 
         return redirect($project->path());
+    }
+
+    public function destroy(Project $project)
+    {
+        $this->authorize('update', $project);
+
+        $project->delete();
+        return redirect('/projects');
     }
 
     /**
