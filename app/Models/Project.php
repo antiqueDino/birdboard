@@ -5,17 +5,16 @@ namespace App\Models;
 use DateTimeInterface;
 use App\Models\Activity;
 use Illuminate\Support\Arr;
+use App\Models\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
     use HasFactory;
-
+    use RecordsActivity;
 
     protected $guarded = [];
-
-    public $old = [];
 
     public function path()
     {
@@ -37,24 +36,6 @@ class Project extends Model
         return $this->tasks()->create(compact('body'));
     }
 
-    public function recordActivity($description)
-    {
-        $this->activity()->create([
-            'description' => $description,
-            'changes' => $this->activityChanges($description)
-        ]);
-    }
-
-    public function activityChanges($description)
-    {
-        if($description == 'updated'){
-            return [
-                'before' => Arr::except(array_diff($this->old, $this->getAttributes()), 'updated_at'),
-                'after' => Arr::except($this->getChanges(), 'updated_at')
-            ];
-        }
-
-    }
 
     public function activity()
     {
