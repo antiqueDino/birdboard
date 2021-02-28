@@ -34,7 +34,7 @@ class ProjectsController extends Controller
 
         // validated
         
-        $attributes = $this->validated(); 
+        $attributes = $this->validateRequest(); 
 
             
         // $attributes['owner_id'] = auth()->id();
@@ -54,15 +54,9 @@ class ProjectsController extends Controller
 
         $this->authorize('update', $project);
 
-        // $attributes = request()->validate([
-        //     'title' => 'required',
-        //     'description' => 'required',
-        //     'notes' => 'min:3'
-        // ]); 
+        // $attributes = $this->validateRequest();
 
-        $attributes = $this->validated();
-
-        $project->update($attributes);
+        $project->update($this->validateRequest());
 
         return redirect($project->path());
     }
@@ -71,7 +65,7 @@ class ProjectsController extends Controller
      * @return array
      */
 
-    protected function validated(){
+    protected function validateRequest(){
 
         return request()->validate([
             'title' => 'sometimes|required',
