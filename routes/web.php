@@ -7,7 +7,6 @@ use App\Http\Controllers\ProjectTasksController;
 use App\Models\Activity;
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
