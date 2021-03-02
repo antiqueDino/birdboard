@@ -16,7 +16,54 @@ class InvitationsTest extends TestCase
     /**
      * @test
      */
-    public function a_project_can_invite_an_user()
+    public function non_owners_may_not_invite_users()
+    {
+        $this->actingAs(User::factory()->create())
+            ->post(ProjectFactory::create()->path() . '/invitations')
+            ->assertStatus(403);
+    }
+
+    /**
+     * @test
+     */
+    public function a_project_owner_can_invite_a_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = ProjectFactory::create();
+
+        $userToInvite = User::factory()->create();
+
+        $this->actingAs($project->owner)
+            ->post($project->path() . '/invitations', [
+                'email' => $userToInvite->email
+            ])
+            ->assertRedirect($project->path());
+
+        $this->assertTrue($project->members->contains($userToInvite));
+
+    }
+
+    /**
+     * @test
+     */
+    public function the_email_address_must_be_associated_with_a_valid_birdboard_account()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)
+            ->post($project->path() . '/invitations', [
+                'email' => 'notauser@example.com'
+            ])
+            ->assertSessionHasErrors([
+                'email' => 'The user you are inviting must hava a Birdboard account.'
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function invited_users_may_update_project_details()
     {
         // Given I have a project
         $project = ProjectFactory::create();
@@ -25,8 +72,9 @@ class InvitationsTest extends TestCase
         $project->invite($newUser = User::factory()->create());
 
         // Then, that a new user will have permission to add tasks
-        $this->signIn($newUser);
-        $this->post(action([ProjectTasksController::class,'store'], $project), $task = ['body' => 'Foo task']);
+        // $this->signIn($newUser);
+        $this->actingAs($newUser)
+            ->post(action([ProjectTasksController::class,'store'], $project), $task = ['body' => 'Foo task']);
 
         $this->assertDatabaseHas('tasks', $task);
     }
