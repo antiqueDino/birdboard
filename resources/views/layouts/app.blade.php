@@ -24,9 +24,9 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-200 bg-opacity-25">
+<body class="theme-light bg-page">
     <div id="app">
-        <nav class=" bg-white ">
+        <nav class=" bg-header ">
             <div class="container mx-auto">
                 @include('partials.navbar')
             </div>

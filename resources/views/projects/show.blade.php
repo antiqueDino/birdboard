@@ -4,7 +4,7 @@
     <header class="flex items-center mb-3 pb-4"> 
         <div class="flex justify-between items-end w-full">
 
-            <p class="text-gray-400 text-sm font-normal">
+            <p class="text-default text-sm font-normal">
                 <a href="/projects" class="text-blue-400 text-sm font-normal no-underline hover:underline">My Projects</a> / {{ $project->title }}
             </p>   
 
@@ -25,7 +25,7 @@
             <div class="lg:w-3/4 px-3 mb-8">
                 
                 <div class="mb-6">
-                    <h2 class="text-xl text-gray-400 font-normal mb-3">Tasks</h2>   
+                    <h2 class="text-xl text-default font-normal mb-3">Tasks</h2>   
                     {{-- tasks --}}
 
                     @foreach ($project->tasks as $task)
@@ -35,7 +35,7 @@
                                 @csrf
 
                                 <div class="flex">
-                                    <input name="body" value="{{ $task->body }}" class="w-full {{ $task->completed ? 'text-gray-400' : ''}}">
+                                    <input name="body" value="{{ $task->body }}" class="bg-card text-default w-full {{ $task->completed ? 'text-default' : ''}}">
                                     <input name="completed" type="checkbox" onChange="this.form.submit()" {{ $task->completed ? 'checked' : ''}}>
                                 </div>
                             </form>
@@ -45,13 +45,13 @@
                     <div class="card mb-3">
                         <form action="{{ $project->path() . '/tasks' }}" method="POST">
                             @csrf
-                            <input class="w-full" placeholder="Add new task" name="body">
+                            <input class="w-full bg-card text-default" placeholder="Add new task" name="body">
                         </form>
                     </div>
                 </div>
 
                 <div>
-                    <h2 class="text-xl text-gray-400 font-normal">General Notes</h2>   
+                    <h2 class="text-xl text-default font-normal">General Notes</h2>   
 
                     {{-- general notes --}}
                     <form action="{{ $project->path() }}" method="post">
