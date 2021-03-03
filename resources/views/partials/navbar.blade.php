@@ -5,10 +5,10 @@
         </a>
     </h1>
         
-    <div >
+    <div class="flex items-center ml-auto list-reset text-default">
 
         <!-- Right Side Of Navbar -->
-        <ul class="navbar-nav ml-auto">
+        <ul class="flex navbar-nav ml-auto list-reset">
             <!-- Authentication Links -->
             @guest
                 @if (Route::has('login'))
@@ -23,6 +23,9 @@
                     </li>
                 @endif
             @else
+
+                <theme-switcher></theme-switcher>
+
                 <li class="nav-item dropdown flex space-x-4">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle flex-1" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         {{ Auth::user()->name }}
